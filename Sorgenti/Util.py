@@ -9,6 +9,8 @@ global T
 
 global N #numero di soluzioni nell'intorno
 
+global TABULISTDIM
+
 def cost(markets, load):
     cost = 0
     
