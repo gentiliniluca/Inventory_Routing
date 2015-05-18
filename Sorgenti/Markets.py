@@ -1,8 +1,9 @@
+import Util
+from Loads import Loads
 from Moves import Moves
 
 class Markets:
     SMax = None
-    T = None
     S = []
     q = []
     x = []
@@ -10,20 +11,19 @@ class Markets:
     
     #inizializza il supermercato con una soluzione iniziale
     def __init__(self, Sh, Sh1, q):
-        self.T = len(q)
         
         self.SMax = Sh
-        self.S = [Sh] * self.T
+        self.S = [Sh] * Util.T
         self.q = q
         self.x = q
-        self.w = [0] * self.T
+        self.w = [0] * Util.T
     
     #I vincoli mantenuti sono:
     #Sht+1 = Sht - qht + xht
     #Sh1 = ShT
     #SMax >= Sht
     #Somma xht = Somma qht
-    def do(self, move):
+    def do(self, move, load):
         
         if (move.t0 < move.t):
             for t in range(move.t + 1, move.t0 + 1):
@@ -40,5 +40,7 @@ class Markets:
         else:
             for t in range(move.t + 1, move.t0 + 1):
                 self.S[t] = self.S[t] + move.x
+        
+        load.do(move) #se la mossa è fattibile si aggiornano i carichi del camion
         
         return True
