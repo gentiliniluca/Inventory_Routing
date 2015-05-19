@@ -2,6 +2,7 @@ import random
 
 import Util
 from Markets import Markets
+from Moves import Moves
 from Loads import Loads
 
 #reperire i dati iniziali (da un qualcosa)
@@ -42,7 +43,7 @@ while k < 1000:
             
             x = random.randint(1, markets[h].x[t0])
             
-            move = Moves(t0, t, x)
+            move = Moves(h, t0, t, x)
             
             markets[h].do(move, load)
             
@@ -58,13 +59,12 @@ while k < 1000:
           
         if(Util.cost(markets) < Util.cost(bestneighbor)):
             bestneighbor = markets
-            bestneighbormoves = tabumoves
-            
+            bestneighbormoves = tabumoves  
     
     if(Util.cost(bestneighbor) < Util.cost(bestsolution)):
         bestsolution = bestneighbor
-    else:
-        if(tabumove in tabulist):
+    else:   
+        if(bestneighbormoves in tabulist):
             continue
         else:
             sk = bestneighbor
