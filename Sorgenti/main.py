@@ -20,8 +20,7 @@ sk = markets
 #ciclo contenente l'algoritmo
 k = 1
 tabulist = []
-condition = True
-while condition:
+while k < 1000:
     # selezionare la miglior soluzione dell'intorno, anche peggiore
     # per il momento selezione casuale
     
@@ -33,7 +32,8 @@ while condition:
         h = random.randint(0, Util.K - 1)
         t0 = random.randint(0, Util.T - 1)
         
-        m = 0
+        tabumoves = []
+        periods = {}
         while (markets[h].x[t0] > 0):
             
             t = random.randint(0, Util.T - 1)
@@ -46,20 +46,20 @@ while condition:
             
             markets[h].do(move, load)
             
-            if(m == 0):
-                tabumove = move
+            if(t in periods):
+                tabumoves[t].x = tabumoves[t].x + move.x
             else:
-                if(tabumove.t == move.t):
-                    tabumove.x = tabumove.x + move.x
-                else:
-                    tabumove.t0 = None
-            m = m + 1
+                periods[t] = True
+                tabumoves.append(move)
             
         if(i == 0):
             bestneighbor = markets
+            bestneighbormoves = tabumoves
           
         if(Util.cost(markets) < Util.cost(bestneighbor)):
             bestneighbor = markets
+            bestneighbormoves = tabumoves
+            
     
     if(Util.cost(bestneighbor) < Util.cost(bestsolution)):
         bestsolution = bestneighbor
@@ -68,9 +68,7 @@ while condition:
             continue
         else:
             sk = bestneighbor
-            if(tabumove.t0 != None):
-                tabulist.append(Move(tabumove.t, tabumove.t0, tabumove.x))
-                if(len(tabulist) > Util.TABULISTDIM):
-                    tabulist.pop(0)
+            tabulist.extend(bestneighbormoves)
+            while(len(tabulist) > Util.TABULISTDIM):
+                tabulist.pop(0)
     k = k + 1
-    #condition = false
