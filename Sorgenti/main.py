@@ -17,6 +17,7 @@ load = Loads(markets)
 
 #come soluzione si intende la situazione dei supermercati
 bestsolution = markets
+bestsolutioncost = Util.cost(markets)
 sk = markets
 #ciclo contenente l'algoritmo
 k = 1
@@ -52,17 +53,24 @@ while k < 1000:
             else:
                 periods[t] = True
                 tabumoves.append(move)
-            
+        
+        marketscost = Util.cost(markets)
+        
         if(i == 0):
             bestneighbor = markets
             bestneighbormoves = tabumoves
-          
-        if(Util.cost(markets) < Util.cost(bestneighbor)):
+            bestneighborcost = marketscost
+        
+        if(marketscost < bestneighborcost):
             bestneighbor = markets
-            bestneighbormoves = tabumoves  
+            bestneighbormoves = tabumoves
+            bestneighborcost = marketscost
+            
+        i = i + 1
     
-    if(Util.cost(bestneighbor) < Util.cost(bestsolution)):
+    if(bestneighborcost < bestsolutioncost):
         bestsolution = bestneighbor
+        bestsolutioncost = bestneighborcost
     else:   
         if(bestneighbormoves in tabulist):
             continue
