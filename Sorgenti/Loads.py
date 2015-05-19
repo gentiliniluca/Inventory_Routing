@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import Util
 from Markets import Markets
 from Moves import Moves

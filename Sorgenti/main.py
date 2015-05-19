@@ -1,9 +1,10 @@
+# coding: utf-8
+
 import random
 
 import Util
 from Markets import Markets
 from Moves import Moves
-from Loads import Loads
 
 #reperire i dati iniziali (da un qualcosa)
 
@@ -17,7 +18,7 @@ load = Loads(markets)
 
 #come soluzione si intende la situazione dei supermercati
 bestsolution = markets
-bestsolutioncost = Util.cost(markets)
+bestsolutioncost = Util.cost(bestsolution)
 sk = markets
 #ciclo contenente l'algoritmo
 k = 1
@@ -46,7 +47,7 @@ while k < 1000:
             
             move = Moves(h, t0, t, x)
             
-            markets[h].do(move, load)
+            markets[h].do(move)
             
             if(t in periods):
                 tabumoves[t].x = tabumoves[t].x + move.x

@@ -1,5 +1,6 @@
+# coding: utf-8
+
 import Util
-from Loads import Loads
 from Moves import Moves
 
 class Markets:
@@ -23,7 +24,7 @@ class Markets:
     #Sh1 = ShT
     #SMax >= Sht
     #Somma xht = Somma qht
-    def do(self, move, load):
+    def do(self, move):
         
         if (move.t0 < move.t):
             for t in range(move.t + 1, move.t0 + 1):
@@ -40,8 +41,6 @@ class Markets:
         else:
             for t in range(move.t + 1, move.t0 + 1):
                 self.S[t] = self.S[t] + move.x
-        
-        load.do(move) #se la mossa è fattibile si aggiornano i carichi del camion
         
         return True
 
