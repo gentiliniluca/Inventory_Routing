@@ -44,3 +44,7 @@ class Markets:
         load.do(move) #se la mossa è fattibile si aggiornano i carichi del camion
         
         return True
+
+    def toString(self):
+    	stringa = "Capacita' max= ", self.SMax, " Scorte iniziali= ", self.S, " Consumo[] ", self.q
+    	return stringa
