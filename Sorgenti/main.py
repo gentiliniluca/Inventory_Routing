@@ -20,7 +20,7 @@ bestsolution = copy.deepcopy(markets)
 bestsolutioncost = Util.cost(bestsolution)
 sk = copy.deepcopy(markets)
 #ciclo contenente l'algoritmo
-k = 1
+k = 0
 tabulist = []
 while k < 1000:
     # selezionare la miglior soluzione dell'intorno, anche peggiore
@@ -34,8 +34,7 @@ while k < 1000:
         h = random.randint(0, Util.K - 1)
         t0 = random.randint(0, Util.T - 1)
         
-        tabumoves = []
-        periods = {}
+        tabumoves = {}
         while (markets[h].x[t0] > 0):
             
             t = random.randint(0, Util.T - 1)
@@ -50,11 +49,10 @@ while k < 1000:
             #valutare se dati h e t0 esistono sempre mosse fattibili
             if(markets[h].do(move)):
             
-                if(t in periods):
+                if(t in tabumoves):
                     tabumoves[t].x = tabumoves[t].x + move.x
                 else:
-                    periods[t] = True
-                    tabumoves.append(move)
+                    tabumoves[t] = copy.deepcopy(move)
         
         marketscost = Util.cost(markets)
         
@@ -73,12 +71,16 @@ while k < 1000:
     if(bestneighborcost < bestsolutioncost):
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
-    else:   
-        if(bestneighbormoves in tabulist):
+    else:
+        bestneighbormoveslist = []
+        for m in bestneighbormoves:
+              bestneighbormoveslist.append(m)
+        
+        if(Util.subfinder(bestneighbormoveslist, tabulist)):
             continue
         else:        
             sk = copy.deepcopy(bestneighbor)
-            tabulist.extend(bestneighbormoves)
+            tabulist.extend(bestneighbormoveslist)
             while(len(tabulist) > Util.TABULISTDIM):
                 tabulist.pop(0)
     k = k + 1

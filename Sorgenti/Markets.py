@@ -17,9 +17,10 @@ class Markets:
         
         self.SMax = Sh
         self.S = [Sh1] * Util.T
-        self.q = q
+        self.q = copy.deepcopy(q)
         self.x = copy.deepcopy(q)
         self.w = [0] * Util.T
+        #utilizzare il peso ù.ù
     
     #I vincoli mantenuti sono:
     #Sht+1 = Sht - qht + xht

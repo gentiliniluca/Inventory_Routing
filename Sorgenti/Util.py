@@ -32,4 +32,15 @@ def cost(markets):
              
     return cost
 
+def subfinder(sublist, list):
+    
+    find = 0
+    for e in sublist:
+        if(e in list):
+            find = find + 1
+    
+    if ((len(sublist) - find) == 0):
+        return True
+    
+    return False
 
