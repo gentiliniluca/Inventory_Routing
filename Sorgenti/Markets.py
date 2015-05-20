@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import copy
+
 import Util
 from Moves import Moves
 
@@ -16,7 +18,7 @@ class Markets:
         self.SMax = Sh
         self.S = [Sh1] * Util.T
         self.q = q
-        self.x = list(q)
+        self.x = copy.deepcopy(q)
         self.w = [0] * Util.T
     
     #I vincoli mantenuti sono:
