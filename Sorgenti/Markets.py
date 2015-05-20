@@ -37,6 +37,9 @@ class Markets:
                 if(self.S[t] + move.x > self.SMax): #se la mossa supera la capacità del magazzino
                     return False
         
+        self.x[move.t0] = self.x[move.t0] - move.x
+        self.x[move.t] = self.x[move.t] + move.x 
+        
         if (move.t0 < move.t):
             for t in range(move.t0 + 1, move.t + 1):
                 self.S[t] = self.S[t] - move.x
@@ -44,9 +47,6 @@ class Markets:
         else:
             for t in range(move.t + 1, move.t0 + 1):
                 self.S[t] = self.S[t] + move.x
-        
-        self.x[move.t0] = self.x[move.t0] - move.x
-        self.x[move.t] = self.x[move.t] + move.x 
           
         return True
 
