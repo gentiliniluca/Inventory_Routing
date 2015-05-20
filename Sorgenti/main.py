@@ -46,35 +46,38 @@ while k < 1000:
             
             move = Moves(h, t0, t, x)
             
-            #TO DO: controllare il valore ritornato dal metodo do (verificare che la mossa sia fattibile)
-            markets[h].do(move)
+            #si controlla il valore ritornato dal metodo do (si verifica che la mossa sia fattibile)
+            #valutare se dati h e t0 esistono sempre mosse fattibili
+            if(markets[h].do(move)):
             
-            if(t in periods):
-                tabumoves[t].x = tabumoves[t].x + move.x
-            else:
-                periods[t] = True
-                tabumoves.append(move)
+                if(t in periods):
+                    tabumoves[t].x = tabumoves[t].x + move.x
+                else:
+                    periods[t] = True
+                    tabumoves.append(move)
         
         marketscost = Util.cost(markets)
         
         if(i == 0):
             bestneighbor = copy.deepcopy(markets)
-            bestneighbormoves = tabumoves
-            bestneighborcost = marketscost
+            bestneighbormoves = copy.deepcopy(tabumoves)
+            bestneighborcost = copy.deepcopy(marketscost)
         
         if(marketscost < bestneighborcost):
             bestneighbor = copy.deepcopy(markets)
-            bestneighbormoves = tabumoves
-            bestneighborcost = marketscost
+            bestneighbormoves = copy.deepcopy(tabumoves)
+            bestneighborcost = copy.deepcopy(marketscost)
             
         i = i + 1
     
     if(bestneighborcost < bestsolutioncost):
-        bestsolution = bestneighbor
-        bestsolutioncost = bestneighborcost
+        bestsolution = copy.deepcopy(bestneighbor)
+        bestsolutioncost = copy.deepcopy(bestneighborcost)
     else:   
-        if(not bestneighbormoves in tabulist):        
-            sk = bestneighbor
+        if(bestneighbormoves in tabulist):
+            continue
+        else:        
+            sk = copy.deepcopy(bestneighbor)
             tabulist.extend(bestneighbormoves)
             while(len(tabulist) > Util.TABULISTDIM):
                 tabulist.pop(0)
