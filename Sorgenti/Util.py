@@ -3,10 +3,12 @@
 #from Markets import Markets
 
 global K
+K=4
 
 global Q
 
 global T
+T=5
 
 global N #numero di soluzioni nell'intorno
 
@@ -31,23 +33,3 @@ def cost(markets):
     return cost
 
 
-def readFile():  
-    try:
-	    markets = []
-	    in_file = open(inputFile,"r")
-	    line = in_file.readline()   #prima linea inutile che rappresenta il commento
-	    ct = 0
-	    while ct < K:
-    		line = in_file.readline()
-    		#print line
-    		a = line.split(' ')
-    		m = Markets(a[1], a[2], a[3:(int(T)+3)])  #mi creo l'oggetto market
-    		markets.append(m)              #appendo alla lista
-    		ct += 1
-	    in_file.close()
-    
-    except Exception as e:
-        print e
-    
-    finally:
-        return markets
