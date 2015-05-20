@@ -1,25 +1,24 @@
 # coding: utf-8
 
 import random
+import copy
 
 import Util
 from Markets import Markets
 from Moves import Moves
 
-#reperire i dati iniziali (da un qualcosa)
-
-
-# inizializzare il problema con una soluzione banale
+#reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
 markets = []
-for h in range(Util.K):
-    markets.append(Markets(S[h], S1[h], q[h]))
-    
-load = Loads(markets)
+markets = Util.readFile()
+#for h in range(Util.K):
+#    markets.append(Markets(S[h], S1[h], q[h]))
+#    
+#load = Loads(markets)
 
 #come soluzione si intende la situazione dei supermercati
-bestsolution = markets
+bestsolution = copy.deepcopy(markets)
 bestsolutioncost = Util.cost(bestsolution)
-sk = markets
+sk = copy.deepcopy(markets)
 #ciclo contenente l'algoritmo
 k = 1
 tabulist = []
@@ -30,7 +29,7 @@ while k < 1000:
     i = 0
     while i < Util.N: #la probabilità di due soluzioni uguali è al momento trascurabile
         #a ogni iterazione si lavora su un intorno di sk
-        markets = sk
+        markets = copy.deepcopy(sk)
         
         h = random.randint(0, Util.K - 1)
         t0 = random.randint(0, Util.T - 1)
@@ -47,6 +46,7 @@ while k < 1000:
             
             move = Moves(h, t0, t, x)
             
+            #TO DO: controllare il valore ritornato dal metodo do (verificare che la mossa sia fattibile)
             markets[h].do(move)
             
             if(t in periods):
@@ -58,12 +58,12 @@ while k < 1000:
         marketscost = Util.cost(markets)
         
         if(i == 0):
-            bestneighbor = markets
+            bestneighbor = copy.deepcopy(markets)
             bestneighbormoves = tabumoves
             bestneighborcost = marketscost
         
         if(marketscost < bestneighborcost):
-            bestneighbor = markets
+            bestneighbor = copy.deepcopy(markets)
             bestneighbormoves = tabumoves
             bestneighborcost = marketscost
             
@@ -73,9 +73,7 @@ while k < 1000:
         bestsolution = bestneighbor
         bestsolutioncost = bestneighborcost
     else:   
-        if(bestneighbormoves in tabulist):
-            continue
-        else:
+        if(not bestneighbormoves in tabulist):        
             sk = bestneighbor
             tabulist.extend(bestneighbormoves)
             while(len(tabulist) > Util.TABULISTDIM):

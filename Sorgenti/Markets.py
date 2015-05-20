@@ -16,7 +16,7 @@ class Markets:
         self.SMax = Sh
         self.S = [Sh1] * Util.T
         self.q = q
-        self.x = q
+        self.x = list(q)
         self.w = [0] * Util.T
     
     #I vincoli mantenuti sono:
@@ -27,7 +27,7 @@ class Markets:
     def do(self, move):
         
         if (move.t0 < move.t):
-            for t in range(move.t + 1, move.t0 + 1):
+            for t in range(move.t0 + 1, move.t + 1):
                 if(self.S[t] - move.x < 0): #se la mossa rende negative le scorte
                     return False
         else:
@@ -38,12 +38,16 @@ class Markets:
         if (move.t0 < move.t):
             for t in range(move.t0 + 1, move.t + 1):
                 self.S[t] = self.S[t] - move.x
+            
         else:
             for t in range(move.t + 1, move.t0 + 1):
                 self.S[t] = self.S[t] + move.x
         
+        self.x[move.t0] = self.x[move.t0] - move.x
+        self.x[move.t] = self.x[move.t] + move.x 
+          
         return True
 
     def toString(self):
-    	stringa = "Capacita' max= ", self.SMax, " Scorte iniziali= ", self.S, " Consumo[] ", self.q
+    	stringa = "Capacita' max= ", self.SMax, " Scorte = ", self.S, " Consumo= ", self.q, "Rifornimento= ", self.x
     	return stringa
