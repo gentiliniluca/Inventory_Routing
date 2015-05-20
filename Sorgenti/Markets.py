@@ -14,7 +14,7 @@ class Markets:
     def __init__(self, Sh, Sh1, q):
         
         self.SMax = Sh
-        self.S = [Sh] * Util.T
+        self.S = [Sh1] * Util.T
         self.q = q
         self.x = q
         self.w = [0] * Util.T
