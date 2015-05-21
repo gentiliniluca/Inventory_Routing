@@ -32,6 +32,7 @@ while k < Util.ITERATIONS:
     # selezionare la miglior soluzione dell'intorno, anche peggiore
     # per il momento selezione casuale
     
+    #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
     i = 0
     while i < Util.N:
         #f = open("output.txt", "a")
@@ -70,6 +71,7 @@ while k < Util.ITERATIONS:
             #f.close()
         
         marketscost = Markets.cost(markets)
+        #lista delle mosse dell'intorno
         
         if(i == 0):
             bestneighbor = copy.deepcopy(markets)
@@ -82,8 +84,11 @@ while k < Util.ITERATIONS:
             bestneighborcost = copy.deepcopy(marketscost)
             
         i = i + 1
+        
+    #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
     
     if(bestneighborcost < bestsolutioncost):
+        #parametro che indica di lavorare nello stesso intorno
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
     else:
@@ -92,8 +97,11 @@ while k < Util.ITERATIONS:
             bestneighbormoveslist.append(Moves(bestneighbormoves[m].h, bestneighbormoves[m].t, bestneighbormoves[m].t0, bestneighbormoves[m].x))
         
         if(Util.subfinder(bestneighbormoveslist, tabulist)):
+            #parametro che indica di lavorare nello stesso intorno
+            #skip sc
             continue
-        else:        
+        else:
+            #parametro che indica di lavorare in un intorno diverso       
             sk = copy.deepcopy(bestneighbor)
             tabulist.extend(bestneighbormoveslist)
             while(len(tabulist) > Util.TABULISTDIM):
