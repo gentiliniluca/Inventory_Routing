@@ -50,7 +50,24 @@ class Markets:
                 self.S[t] = self.S[t] + move.x
           
         return True
-
+      
     def toString(self):
     	stringa = "Capacita' max= ", self.SMax, " Scorte = ", self.S, " Consumo= ", self.q, "Rifornimento= ", self.x
     	return stringa
+ 
+ 
+ 
+    @staticmethod
+    def cost(markets):
+        cost = 0    
+        
+        for t in range(Util.T):
+            value = 0 #variabile che tiene conto del carico sul camion nel singolo periodo t
+            for h in range(Util.K):
+                if(markets[h].x[t] > 0): #se porto materiale al market allora incremento il costo perchè faccio un giro
+                    cost = cost + 1
+                    value = value + markets[h].x[t]
+            if(value > Util.Q): #controllo se supero la capacità del camion, se si aumento il costo
+                cost = cost + 1
+                 
+        return cost
