@@ -3,7 +3,7 @@
 #from Markets import Markets
 
 global K
-K=4
+K=10
 
 global Q
 Q = 300
