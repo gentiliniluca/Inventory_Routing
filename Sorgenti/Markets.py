@@ -52,7 +52,7 @@ class Markets:
         return True
       
     def toString(self):
-    	stringa = "Capacita' max= ", self.SMax, " Scorte = ", self.S, " Consumo= ", self.q, "Rifornimento= ", self.x
+    	stringa = "Capacità max = " + str(self.SMax) + "\tScorte = " + str(self.S) + "\tConsumo = " + str(self.q) + "\tRifornimento = " + str(self.x)
     	return stringa
  
  
