@@ -84,3 +84,7 @@ while k < 1000:
             while(len(tabulist) > Util.TABULISTDIM):
                 tabulist.pop(0)
     k = k + 1
+
+for h in bestsolution:
+    h.toString()
+print "Cost:", bestsolutioncost
