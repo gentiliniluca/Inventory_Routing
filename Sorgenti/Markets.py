@@ -73,7 +73,6 @@ class Markets:
                 
             if(value>Util.Q):
                 excessloadcamion=excessloadcamion+1
-                    
                 
                 #calcolo del costo: variabile furgone incrementata di 1 ogni volta che si sfora la capacità
                 #poi costo = costo*(1+furgone/2T)
@@ -81,6 +80,5 @@ class Markets:
         #return cost
         
         c=float(excessloadcamion)/float(Util.T)
-        
         #print c        
         return cost*(1+c)

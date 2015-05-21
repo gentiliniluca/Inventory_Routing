@@ -12,13 +12,13 @@ global T
 T=5
 
 global ITERATIONS
-ITERATIONS = 200
+ITERATIONS = 512
 
 global N #numero di soluzioni nell'intorno
-N = 15
+N = 64
 
 global TABULISTDIM
-TABULISTDIM = 15
+TABULISTDIM = 10
 
 global inputFile
 inputFile="input.txt"

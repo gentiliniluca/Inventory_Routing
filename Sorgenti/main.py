@@ -93,7 +93,7 @@ while k < Util.ITERATIONS:
             i = i + 1
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
-    sorted(neighborhood, key = itemgetter(0))
+    neighborhood = sorted(neighborhood, key = itemgetter(0))
     bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
     
     if(bestneighborcost < bestsolutioncost):
