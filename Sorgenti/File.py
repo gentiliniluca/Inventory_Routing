@@ -4,8 +4,7 @@ import Util
 from Markets import Markets
 
 
-@staticmethod
-def  readFile():  
+def readFile():  
     try:
         markets = []
         in_file = open(Util.inputFile,"r")
@@ -15,7 +14,7 @@ def  readFile():
             line = in_file.readline()
             #print line
             a = line.split(' ')
-            m = Markets(a[1], a[2], a[3:(int(Util.T)+3)])  #mi creo l'oggetto market
+            m = Markets(int(a[1]), int(a[2]), map(int, a[3:(int(Util.T)+3)]))  #mi creo l'oggetto market
             markets.append(m)              #appendo alla lista
             ct += 1
         in_file.close()

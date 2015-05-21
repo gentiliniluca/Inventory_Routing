@@ -6,13 +6,19 @@ global K
 K=4
 
 global Q
+Q = 300
 
 global T
 T=5
 
+global ITERATIONS
+ITERATIONS = 100
+
 global N #numero di soluzioni nell'intorno
+N = 10
 
 global TABULISTDIM
+TABULISTDIM = 15
 
 global inputFile
 inputFile="input.txt"
