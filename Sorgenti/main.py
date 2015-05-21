@@ -3,13 +3,14 @@
 import random
 import copy
 from operator import itemgetter
+import time
 
 import Util
 import File
 from Markets import Markets
 from Moves import Moves
 
-
+start = time.time()
 #reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
 markets = []
 markets = File.readFile()
@@ -121,4 +122,5 @@ for h in bestsolution:
     print h.toString()
 #f.write("Cost:" + str(bestsolutioncost))
 print "Cost:" + str(bestsolutioncost)
+print "Elapsed time:", time.time()-start, "seconds."
 #f.close()
