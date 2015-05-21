@@ -28,11 +28,25 @@ sk = copy.deepcopy(markets)
 tabulist = []
 newneighborhood = True
 k = 0
+print "\nExecution:  " + "\t",
+tmp = -1
 while k < Util.ITERATIONS:
     #f = open("output.txt", "a")
     #f.write("K =" + str(k))
     #f.close()
-    print k
+    #print k
+    
+    
+    
+    #Un po' di piacere per gli occhi...
+    perCent = k*100//Util.ITERATIONS
+    if(perCent % 10 == 0 and tmp != perCent):
+        if(tmp != -1):
+            print " - ",
+        print str(perCent) + "%",
+        tmp = perCent
+    
+    
     # selezionare la miglior soluzione dell'intorno, anche peggiore
     # per il momento selezione casuale
     
@@ -117,10 +131,13 @@ while k < Util.ITERATIONS:
             while(len(tabulist) > Util.TABULISTDIM):
                 tabulist.pop(0)
     k = k + 1
+print " - 100%\n"
+print "Elapsed time:", int(time.time()-start), "seconds\n\nThe best solution is:"
 
 for h in bestsolution:
     print h.toString()
+    
+print "\nCost: " + str(bestsolutioncost)
 #f.write("Cost:" + str(bestsolutioncost))
-print "Cost:" + str(bestsolutioncost)
-print "Elapsed time:", time.time()-start, "seconds."
+
 #f.close()
