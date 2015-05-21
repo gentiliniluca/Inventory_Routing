@@ -74,7 +74,7 @@ while k < 1000:
     else:
         bestneighbormoveslist = []
         for m in bestneighbormoves:
-              bestneighbormoveslist.append(m)
+              bestneighbormoveslist.append(Moves(m.h, m.t, m.t0, m.x))
         
         if(Util.subfinder(bestneighbormoveslist, tabulist)):
             continue
