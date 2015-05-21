@@ -6,16 +6,16 @@ global K
 K=10
 
 global Q
-Q = 300
+Q = 250
 
 global T
 T=5
 
 global ITERATIONS
-ITERATIONS = 100
+ITERATIONS = 200
 
 global N #numero di soluzioni nell'intorno
-N = 10
+N = 15
 
 global TABULISTDIM
 TABULISTDIM = 15

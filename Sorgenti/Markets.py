@@ -60,6 +60,7 @@ class Markets:
     @staticmethod
     def cost(markets):
         cost = 0    
+        excessloadcamion=0
         
         for t in range(Util.T):
             value = 0 #variabile che tiene conto del carico sul camion nel singolo periodo t
@@ -67,9 +68,19 @@ class Markets:
                 if(markets[h].x[t] > 0): #se porto materiale al market allora incremento il costo perchè faccio un giro
                     cost = cost + 1
                     value = value + markets[h].x[t]
-            if(value > Util.Q): #controllo se supero la capacità del camion, se si aumento il costo
-                cost = cost + 2
+            #if(value > Util.Q): #controllo se supero la capacità del camion, se si aumento il costo
+             #   cost = cost + 2
+                
+            if(value>Util.Q):
+                excessloadcamion=excessloadcamion+1
+                    
+                
                 #calcolo del costo: variabile furgone incrementata di 1 ogni volta che si sfora la capacità
                 #poi costo = costo*(1+furgone/2T)
-                 
-        return cost
+         
+        #return cost
+        
+        c=float(excessloadcamion)/float(Util.T)
+        
+        #print c        
+        return cost*(1+c)
