@@ -68,6 +68,8 @@ class Markets:
                     cost = cost + 1
                     value = value + markets[h].x[t]
             if(value > Util.Q): #controllo se supero la capacità del camion, se si aumento il costo
-                cost = cost + 1
+                cost = cost + 2
+                #calcolo del costo: variabile furgone incrementata di 1 ogni volta che si sfora la capacità
+                #poi costo = costo*(1+furgone/2T)
                  
         return cost
