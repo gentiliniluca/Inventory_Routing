@@ -2,6 +2,7 @@
 
 import random
 import copy
+from operator import itemgetter
 
 import Util
 import File
@@ -21,9 +22,11 @@ markets = File.readFile()
 bestsolution = copy.deepcopy(markets)
 bestsolutioncost = Markets.cost(bestsolution)
 sk = copy.deepcopy(markets)
+
 #ciclo contenente l'algoritmo
-k = 0
 tabulist = []
+newneighborhood = True
+k = 0
 while k < Util.ITERATIONS:
     #f = open("output.txt", "a")
     #f.write("K =" + str(k))
@@ -33,75 +36,81 @@ while k < Util.ITERATIONS:
     # per il momento selezione casuale
     
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
-    i = 0
-    while i < Util.N:
-        #f = open("output.txt", "a")
-        #f.write("I =" + str(i))
-        #f.close()
-        #print "I =" + str(i) #la probabilità di due soluzioni uguali è al momento trascurabile
-        #a ogni iterazione si lavora su un intorno di sk
-        markets = copy.deepcopy(sk)
-        
-        h = random.randint(0, Util.K - 1)
-        t0 = random.randint(0, Util.T - 1)
-        
-        tabumoves = {}
-        while (markets[h].x[t0] > 0):
+    if(newneighborhood):
+        neighborhood = []
+        i = 0
+        while i < Util.N:
             #f = open("output.txt", "a")
-            #f.write(str(markets[h].x[t0]))
-            
-            t = random.randint(0, Util.T - 1)
-            while (t == t0):
-                t = random.randint(0, Util.T - 1)
-            
-            x = random.randint(1, markets[h].x[t0])
-            
-            move = Moves(h, t0, t, x)
-            #f.write(str(h) + str(t0) + str(t) + str(x))
-            #f.write(str(markets[h]))
-            #si controlla il valore ritornato dal metodo do (si verifica che la mossa sia fattibile)
-            #valutare se dati h e t0 esistono sempre mosse fattibili
-            if(markets[h].do(move)):
-                #f.write("Mossa")
-                if(t in tabumoves):
-                    tabumoves[t].x = tabumoves[t].x + move.x
-                else:
-                    tabumoves[t] = copy.deepcopy(move)
-            
+            #f.write("I =" + str(i))
             #f.close()
-        
-        marketscost = Markets.cost(markets)
-        #lista delle mosse dell'intorno
-        
-        if(i == 0):
-            bestneighbor = copy.deepcopy(markets)
-            bestneighbormoves = copy.deepcopy(tabumoves)
-            bestneighborcost = copy.deepcopy(marketscost)
-        
-        if(marketscost < bestneighborcost):
-            bestneighbor = copy.deepcopy(markets)
-            bestneighbormoves = copy.deepcopy(tabumoves)
-            bestneighborcost = copy.deepcopy(marketscost)
+            #print "I =" + str(i) #la probabilità di due soluzioni uguali è al momento trascurabile
+            #a ogni iterazione si lavora su un intorno di sk
+            markets = copy.deepcopy(sk)
             
-        i = i + 1
+            h = random.randint(0, Util.K - 1)
+            t0 = random.randint(0, Util.T - 1)
+            
+            tabumoves = {}
+            while (markets[h].x[t0] > 0):
+                #f = open("output.txt", "a")
+                #f.write(str(markets[h].x[t0]))
+                
+                t = random.randint(0, Util.T - 1)
+                while (t == t0):
+                    t = random.randint(0, Util.T - 1)
+                
+                x = random.randint(1, markets[h].x[t0])
+                
+                move = Moves(h, t0, t, x)
+                #f.write(str(h) + str(t0) + str(t) + str(x))
+                #f.write(str(markets[h]))
+                #si controlla il valore ritornato dal metodo do (si verifica che la mossa sia fattibile)
+                #valutare se dati h e t0 esistono sempre mosse fattibili
+                if(markets[h].do(move)):
+                    #f.write("Mossa")
+                    if(t in tabumoves):
+                        tabumoves[t].x = tabumoves[t].x + move.x
+                    else:
+                        tabumoves[t] = copy.deepcopy(move)
+                
+                #f.close()
+            
+            marketscost = Markets.cost(markets)
+            
+            #lista delle mosse dell'intorno
+            neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), copy.deepcopy(tabumoves)))
+            
+            #if(i == 0):
+            #    bestneighbor = copy.deepcopy(markets)
+            #    bestneighbormoves = copy.deepcopy(tabumoves)
+            #    bestneighborcost = copy.deepcopy(marketscost)
+            
+            #if(marketscost < bestneighborcost):
+            #    bestneighbor = copy.deepcopy(markets)
+            #    bestneighbormoves = copy.deepcopy(tabumoves)
+            #    bestneighborcost = copy.deepcopy(marketscost)
+                
+            i = i + 1
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
+    sorted(neighborhood, key = itemgetter(0))
+    bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
     
     if(bestneighborcost < bestsolutioncost):
-        #parametro che indica di lavorare nello stesso intorno
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
+        newneighborhood = False
     else:
         bestneighbormoveslist = []
         for m in bestneighbormoves:
             bestneighbormoveslist.append(Moves(bestneighbormoves[m].h, bestneighbormoves[m].t, bestneighbormoves[m].t0, bestneighbormoves[m].x))
         
         if(Util.subfinder(bestneighbormoveslist, tabulist)):
-            #parametro che indica di lavorare nello stesso intorno
-            #skip sc
+            newneighborhood = False
+            neighborhood.pop(0)
             continue
         else:
-            #parametro che indica di lavorare in un intorno diverso       
+            newneighborhood = True       
             sk = copy.deepcopy(bestneighbor)
             tabulist.extend(bestneighbormoveslist)
             while(len(tabulist) > Util.TABULISTDIM):
