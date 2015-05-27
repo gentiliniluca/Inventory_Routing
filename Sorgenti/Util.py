@@ -18,7 +18,7 @@ global N #numero di soluzioni nell'intorno
 N = 64
 
 global TABULISTDIM
-TABULISTDIM = 10
+TABULISTDIM = 20
 
 global inputFile
 inputFile="input.txt"

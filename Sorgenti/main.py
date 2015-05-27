@@ -111,25 +111,24 @@ while k < Util.ITERATIONS:
     neighborhood = sorted(neighborhood, key = itemgetter(0))
     bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
     
+    bestneighbormoveslist = []
+    for m in bestneighbormoves:
+        bestneighbormoveslist.append(Moves(bestneighbormoves[m].h, bestneighbormoves[m].t, bestneighbormoves[m].t0, bestneighbormoves[m].x))
+    
     if(bestneighborcost < bestsolutioncost):
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
-        newneighborhood = False
     else:
-        bestneighbormoveslist = []
-        for m in bestneighbormoves:
-            bestneighbormoveslist.append(Moves(bestneighbormoves[m].h, bestneighbormoves[m].t, bestneighbormoves[m].t0, bestneighbormoves[m].x))
-        
         if(Util.subfinder(bestneighbormoveslist, tabulist)):
             newneighborhood = False
             neighborhood.pop(0)
             continue
-        else:
-            newneighborhood = True       
-            sk = copy.deepcopy(bestneighbor)
-            tabulist.extend(bestneighbormoveslist)
-            while(len(tabulist) > Util.TABULISTDIM):
-                tabulist.pop(0)
+    
+    newneighborhood = True       
+    sk = copy.deepcopy(bestneighbor)
+    tabulist.extend(bestneighbormoveslist)
+    while(len(tabulist) > Util.TABULISTDIM):
+        tabulist.pop(0)    
     k = k + 1
 print " - 100%\n"
 print "Elapsed time:", int(time.time()-start), "seconds\n\nThe best solution is:"
