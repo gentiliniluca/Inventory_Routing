@@ -23,6 +23,8 @@ TABULISTDIM = 20
 global inputFile
 inputFile="input.txt"
 
+global inputCost
+inputCost="distanceCosts.txt"
 
 
 def subfinder(sublist, list):
