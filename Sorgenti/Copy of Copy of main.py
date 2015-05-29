@@ -85,6 +85,8 @@ while k < Util.ITERATIONS:
                                     
                                     i = 0
                                     for t in range(0, T):
+                                        firstimprovement = False
+                                        
                                         if(t != t0):
                                             move = Moves(h, t0, t, x[i])
                                             i = i + 1
@@ -92,7 +94,9 @@ while k < Util.ITERATIONS:
                                             if(markets[h].do(move)):
                                                 marketscost = Markets.cost(markets)
                                                 
-                                                if(marketscost < skcost):
+                                                neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), copy.deepcopy(move)))
+                                                
+                                                if((marketscost < skcost) and (move not in tabulist)):
                                                     firstimprovement = True
                                         
                                         if(firstimprovement):
@@ -117,8 +121,13 @@ while k < Util.ITERATIONS:
                 break
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
-    neighborhood = sorted(neighborhood, key = itemgetter(0))
-    bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
+    if(firstimprovement):
+        bestneighborcost = marketscost
+        bestneighbor = markets
+        bestneighbormoves = move
+    else:
+        neighborhood = sorted(neighborhood, key = itemgetter(0))
+        bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
     
     bestneighbormoveslist = []
     for m in bestneighbormoves:
