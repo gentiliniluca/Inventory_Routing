@@ -30,7 +30,7 @@ sk = copy.deepcopy(markets)
 tabulist = []
 newneighborhood = True
 k = 0
-print "\nExecution:  " + "\t",
+#print "\nExecution:  " + "\t",
 tmp = -1
 while k < Util.ITERATIONS:
     #f = open("output.txt", "a")
@@ -41,12 +41,12 @@ while k < Util.ITERATIONS:
     
     
     #Un po' di piacere per gli occhi...
-    perCent = k*100//Util.ITERATIONS
-    if(perCent % 10 == 0 and tmp != perCent):
-        if(tmp != -1):
-            print " - ",
-        print str(perCent) + "%",
-        tmp = perCent
+    #perCent = k*100//Util.ITERATIONS
+    #if(perCent % 10 == 0 and tmp != perCent):
+    #    if(tmp != -1):
+    #        print " - ",
+    #    print str(perCent) + "%",
+    #    tmp = perCent
     
     
     # selezionare la miglior soluzione dell'intorno, anche peggiore
@@ -54,10 +54,11 @@ while k < Util.ITERATIONS:
     
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
     neighborhood = []
-    tabulist = []
     firstimprovement = False
     skcost = Markets.cost(sk)
+    h = 0
     for h in range(0, Util.K):
+        t0 = 0
         for t0 in range(0, Util.T):
             print sk[h].x[t0]
             if(sk[h].x[t0] > 0):
@@ -87,18 +88,21 @@ while k < Util.ITERATIONS:
                                     markets = copy.deepcopy(sk)
                                     
                                     i = 0
+                                    t = 0
                                     domove = True
+                                    tabumove = False
                                     for t in range(0, Util.T):
                                         
                                         if(t != t0):
-                                            move = Moves(h, t0, t, x[i])
-                                            print "move", h, t0, t, x[i]
+                                            if(x[i] > 0):
+                                                move = Moves(h, t0, t, x[i])
+                                                if(markets[h].do(move)):
+                                                    if((h, t) in tabulist):
+                                                        tabumove = True
+                                                else:
+                                                    domove = False
+                                                #print "move", h, t0, t, x[i], domove, tabumove
                                             i = i + 1
-                                            if(markets[h].do(move)):
-                                                if((h, t) in tabulist):
-                                                    tabumove = True
-                                            else:
-                                                domove = False
                                     
                                     
                                     if(domove):
@@ -137,7 +141,6 @@ while k < Util.ITERATIONS:
             break
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
-    print neighborhood
     neighborhood = sorted(neighborhood, key = itemgetter(0))
     bestneighborcost, bestneighbor, bestneighbormove = neighborhood[0]
     
@@ -156,7 +159,7 @@ while k < Util.ITERATIONS:
     while(len(tabulist) > Util.TABULISTDIM):
         tabulist.pop(0)    
     k = k + 1
-print " - 100%\n"
+#print " - 100%\n"
 print "Elapsed time:", int(time.time()-start), "seconds\n\nThe best solution is:"
 
 for h in bestsolution:
