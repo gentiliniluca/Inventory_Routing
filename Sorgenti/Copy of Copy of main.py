@@ -107,7 +107,7 @@ while k < Util.ITERATIONS:
                                     
                                     if(domove):
                                         marketscost = Markets.cost(markets)
-                                        print marketscost, bestsolutioncost
+                                        print marketscost, skcost, bestsolutioncost
                                         if(marketscost < bestsolutioncost):
                                             firstimprovement = True
                                             bestsolution = copy.deepcopy(markets)
