@@ -12,7 +12,7 @@ global T
 T=5
 
 global ITERATIONS
-ITERATIONS = 512
+ITERATIONS = 256
 
 global N #numero di soluzioni nell'intorno
 N = 64

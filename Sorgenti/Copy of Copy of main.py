@@ -53,28 +53,29 @@ while k < Util.ITERATIONS:
     # per il momento selezione casuale
     
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
-    if(newneighborhood):
-        neighborhood = []
-        skcost = Markets.cost(sk)
-        
-        for h in range(0, K):
-            for t0 in range(0, T):
-                
-                t1 = markets[h].x[t0]
+    neighborhood = []
+    tabulist = []
+    firstimprovement = False
+    skcost = Markets.cost(sk)
+    for h in range(0, Util.K):
+        for t0 in range(0, Util.T):
+            print sk[h].x[t0]
+            if(sk[h].x[t0] > 0):
+                t1 = sk[h].x[t0]
                 t2 = 0
                 while(t1 >= t2):
-                    t2 = markets[h].x[t0] - t1
+                    t2 = sk[h].x[t0] - t1
                     t3 = 0
                     while(t2 >= t3):
-                        t3 = markets[h].x[t0] - t1 - t2
+                        t3 = sk[h].x[t0] - t1 - t2
                         t4 = 0
                         while(t3 >= t4):
-                            t4 = markets[h].x[t0] - t1 - t2 - t3
+                            t4 = sk[h].x[t0] - t1 - t2 - t3
                             if((t1>=t2) and (t2>=t3) and (t3>=t4)):
                                 # trovata una mossa valida
                                 permutations = []
                                 for l in list(itertools.permutations((t1, t2, t3, t4))):
-                                    if(not l in p):
+                                    if(not l in permutations):
                                         permutations.append(l)
                                 #trovate tutte le permutazioni
                                 
@@ -82,25 +83,40 @@ while k < Util.ITERATIONS:
                                     x = []
                                     for e in p:
                                         x.append(e)
+                                        
+                                    markets = copy.deepcopy(sk)
                                     
                                     i = 0
-                                    for t in range(0, T):
-                                        firstimprovement = False
+                                    domove = True
+                                    for t in range(0, Util.T):
                                         
                                         if(t != t0):
                                             move = Moves(h, t0, t, x[i])
+                                            print "move", h, t0, t, x[i]
                                             i = i + 1
-                                            
                                             if(markets[h].do(move)):
-                                                marketscost = Markets.cost(markets)
-                                                
-                                                neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), copy.deepcopy(move)))
-                                                
-                                                if((marketscost < skcost) and (move not in tabulist)):
+                                                if((h, t) in tabulist):
+                                                    tabumove = True
+                                            else:
+                                                domove = False
+                                    
+                                    
+                                    if(domove):
+                                        marketscost = Markets.cost(markets)
+                                        print marketscost, bestsolutioncost
+                                        if(marketscost < bestsolutioncost):
+                                            firstimprovement = True
+                                            bestsolution = copy.deepcopy(markets)
+                                            bestsolutioncost = copy.deepcopy(marketscost)
+                                            neighborhood.append((bestsolutioncost, bestsolution, (h, t0)))
+                                        else:
+                                            if(not tabumove):
+                                                neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), (h, t0)))
+                                                if(marketscost < skcost):
                                                     firstimprovement = True
-                                        
-                                        if(firstimprovement):
-                                            break
+                                                
+                                    domove = True
+                                    tabumove = False
                                         
                                     if(firstimprovement):
                                         break
@@ -115,36 +131,28 @@ while k < Util.ITERATIONS:
                     t1 = t1 - 1
                     if(firstimprovement):
                         break
-                if(firstimprovement):
-                    break
             if(firstimprovement):
                 break
+        if(firstimprovement):
+            break
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
-    if(firstimprovement):
-        bestneighborcost = marketscost
-        bestneighbor = markets
-        bestneighbormoves = move
-    else:
-        neighborhood = sorted(neighborhood, key = itemgetter(0))
-        bestneighborcost, bestneighbor, bestneighbormoves = neighborhood[0]
+    print neighborhood
+    neighborhood = sorted(neighborhood, key = itemgetter(0))
+    bestneighborcost, bestneighbor, bestneighbormove = neighborhood[0]
     
-    bestneighbormoveslist = []
-    for m in bestneighbormoves:
-        bestneighbormoveslist.append(Moves(bestneighbormoves[m].h, bestneighbormoves[m].t, bestneighbormoves[m].t0, bestneighbormoves[m].x))
+    #if(bestneighborcost < bestsolutioncost):
+    #    bestsolution = copy.deepcopy(bestneighbor)
+    #    bestsolutioncost = copy.deepcopy(bestneighborcost)
+    #else:
+    #    if(Util.subfinder(bestneighbormoveslist, tabulist)):
+    #        newneighborhood = False
+    #        neighborhood.pop(0)
+    #        continue
     
-    if(bestneighborcost < bestsolutioncost):
-        bestsolution = copy.deepcopy(bestneighbor)
-        bestsolutioncost = copy.deepcopy(bestneighborcost)
-    else:
-        if(Util.subfinder(bestneighbormoveslist, tabulist)):
-            newneighborhood = False
-            neighborhood.pop(0)
-            continue
-    
-    newneighborhood = True       
+    #newneighborhood = True       
     sk = copy.deepcopy(bestneighbor)
-    tabulist.extend(bestneighbormoveslist)
+    tabulist.append(bestneighbormove)
     while(len(tabulist) > Util.TABULISTDIM):
         tabulist.pop(0)    
     k = k + 1
