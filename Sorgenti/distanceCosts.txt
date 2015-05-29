@@ -2,10 +2,15 @@
 a z 10 
 b z 20 
 c z 15 
-d z 62 
+d z 62
+e z 16  
 a b 20 
 a c 30 
 a d 40 
+a e 23 
 b c 35 
 b d 38 
+b e 32 
 c d 51 
+c e 52 
+d e 61 

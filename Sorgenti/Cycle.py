@@ -67,10 +67,11 @@ def CostCalculate(insertnode,inputDictionary,itemDictionary):
 def CreateCycles():
     separator="-"
     inputDictionary=readCostFile()
-    CyclesDictionary2={}
+    CyclesDictionary={}
+    outputDictionary={}
+    appDictionary={}
     
-    
-    for i in range (0,4): #da mettere Util.K
+    for i in range (0,5): #da mettere Util.K
         for j in range (0,len(inputDictionary)):
             elementList=inputDictionary[j]
             if(elementList[1]=='z'):
@@ -79,39 +80,49 @@ def CreateCycles():
                 app.append(2*elementList[2])
                 app.append(elementList[1]+separator+elementList[0]+separator+elementList[1])
                 
-                CyclesDictionary2[index] = app 
+                CyclesDictionary[index] = app 
                 
     
+    outputDictionary=copy.deepcopy(CyclesDictionary)
+    print outputDictionary
+    print CyclesDictionary
     
-    for i in range (0,len (CyclesDictionary2)):
-        indexList=CyclesDictionary2.keys()
-        app=indexList[i]
-        finalindex=""
-        for j in range (ord('a'),ord('a')+4): #al posto di 4 ci va Util.K
-            if (app.find(chr(j))==-1):
-                addElement= CostCalculate(chr(j),inputDictionary,CyclesDictionary2[indexList[i]])
+    
+    for h in range(0, 5-1): #mettere Util.K
+    
+        for i in range (0,len (CyclesDictionary)):
+            indexList=CyclesDictionary.keys()
+            appindex=indexList[i]
+            finalindex=""
+            for j in range (ord('a'),ord('a')+5): #al posto di 4 ci va Util.K
                 
-                for counter in range (0,len(app)):
-                    if(app[counter]>chr(j)):
-                        finalindex=app[0:counter]
-                        finalindex=finalindex+chr(j)
-                        finalindex=finalindex+app[counter::]
-                        break
-                
-                
-                print finalindex
-                print addElement
-                
-                if(finalindex in(CyclesDictionary2)): 
-                    print "Entrato",finalindex
-                    element=CyclesDictionary2[finalindex]
-                    if(addElement[0]<element[0]):
-                        CyclesDictionary2[finalindex]=addElement
-                else:
-                    CyclesDictionary2[finalindex]=addElement                    
-                        
-             
+                if (appindex.find(chr(j))==-1):
+                    addElement= CostCalculate(chr(j),inputDictionary,CyclesDictionary[indexList[i]])
                     
-    print CyclesDictionary2
-
+                    for counter in range (0,len(appindex)):
+                        if(appindex[counter]>chr(j)):
+                            finalindex=appindex[0:counter]
+                            finalindex=finalindex+chr(j)
+                            finalindex=finalindex+appindex[counter::]
+                            break
+                    
+                    
+                    #print finalindex
+                    #print addElement
+                    
+                    if(finalindex in(appDictionary)): 
+                        element=appDictionary[finalindex]
+                        if(addElement[0]<element[0]):
+                            appDictionary[finalindex]=addElement
+                    else:
+                        appDictionary[finalindex]=addElement                    
+                            
+            
+            outputDictionary.update(appDictionary)  
+        CyclesDictionary=copy.deepcopy(appDictionary)
+        appDictionary={}
+        #print CyclesDictionary
+        
+    print outputDictionary
+    print len(outputDictionary)
 CreateCycles()
