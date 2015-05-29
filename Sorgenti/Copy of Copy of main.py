@@ -2,6 +2,7 @@
 
 import random
 import copy
+import itertools
 from operator import itemgetter
 import time
 
@@ -9,6 +10,7 @@ import Util
 import File
 from Markets import Markets
 from Moves import Moves
+from itertools import permutations
 
 start = time.time()
 #reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
@@ -52,20 +54,67 @@ while k < Util.ITERATIONS:
     
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
     if(newneighborhood):
-        a = x[t0]
-        b = 0
-        while(a >= b):
-            b = x[t0] - a
-            c = 0
-            while(b >= c):
-                c = x[t0] - a - b
-                d = 0
-                while(c >= d):
-                    d = x[t0] - a - b - c
-                    #fai qualcosa
-                    c = c - 1
-                b = b - 1
-            a = a - 1
+        neighborhood = []
+        skcost = Markets.cost(sk)
+        
+        for h in range(0, K):
+            for t0 in range(0, T):
+                
+                t1 = markets[h].x[t0]
+                t2 = 0
+                while(t1 >= t2):
+                    t2 = markets[h].x[t0] - t1
+                    t3 = 0
+                    while(t2 >= t3):
+                        t3 = markets[h].x[t0] - t1 - t2
+                        t4 = 0
+                        while(t3 >= t4):
+                            t4 = markets[h].x[t0] - t1 - t2 - t3
+                            if((t1>=t2) and (t2>=t3) and (t3>=t4)):
+                                # trovata una mossa valida
+                                permutations = []
+                                for l in list(itertools.permutations((t1, t2, t3, t4))):
+                                    if(not l in p):
+                                        permutations.append(l)
+                                #trovate tutte le permutazioni
+                                
+                                for p in permutations:
+                                    x = []
+                                    for e in p:
+                                        x.append(e)
+                                    
+                                    i = 0
+                                    for t in range(0, T):
+                                        if(t != t0):
+                                            move = Moves(h, t0, t, x[i])
+                                            i = i + 1
+                                            
+                                            if(markets[h].do(move)):
+                                                marketscost = Markets.cost(markets)
+                                                
+                                                if(marketscost < skcost):
+                                                    firstimprovement = True
+                                        
+                                        if(firstimprovement):
+                                            break
+                                        
+                                    if(firstimprovement):
+                                        break
+                            t3 = t3 - 1
+                            if(firstimprovement):
+                                break
+                        t3 = 0
+                        t2 = t2 - 1
+                        if(firstimprovement):
+                            break
+                    t2 = 0
+                    t1 = t1 - 1
+                    if(firstimprovement):
+                        break
+                if(firstimprovement):
+                    break
+            if(firstimprovement):
+                break
         
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
     neighborhood = sorted(neighborhood, key = itemgetter(0))
