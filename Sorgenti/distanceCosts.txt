@@ -1,11 +1,11 @@
 #sorgente-destinazione costo (z base)
-a-z 10 
-b-z 20 
-c-z 15 
-d-z 62 
-a-b 20 
-a-c 30 
-a-d 40 
-b-c 35 
-b-d 38 
-c-d 51 
+a z 10 
+b z 20 
+c z 15 
+d z 62 
+a b 20 
+a c 30 
+a d 40 
+b c 35 
+b d 38 
+c d 51 
