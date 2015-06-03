@@ -30,9 +30,10 @@ sk = copy.deepcopy(markets)
 tabulist = []
 newneighborhood = True
 k = 0
+stallcounter = 0
 #print "\nExecution:  " + "\t",
 tmp = -1
-while k < Util.ITERATIONS:
+while (k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER):
     #f = open("output.txt", "a")
     #f.write("K =" + str(k))
     #f.close()
@@ -111,7 +112,9 @@ while k < Util.ITERATIONS:
                                     bestsolution = copy.deepcopy(markets)
                                     bestsolutioncost = copy.deepcopy(marketscost)
                                     neighborhood.append((bestsolutioncost, bestsolution, (h, t0)))
+                                    stallcounter = 0
                                 else:
+                                    stallcounter = stallcounter + 1
                                     if(not tabumove):
                                         neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), (h, t0)))
                                         if(marketscost < skcost):

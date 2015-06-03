@@ -12,7 +12,10 @@ global T
 T=5
 
 global ITERATIONS
-ITERATIONS = 256
+ITERATIONS = 128
+
+global MAXSTALLCOUNTER
+MAXSTALLCOUNTER = 32
 
 global N #numero di soluzioni nell'intorno
 N = 64
