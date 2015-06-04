@@ -129,5 +129,4 @@ def CreateCycles():
         cycles_dictionary=copy.deepcopy(app_dictionary)
                 
         app_dictionary={}
-    return output_dictionary   
-    
+    return output_dictionary

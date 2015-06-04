@@ -4,6 +4,8 @@ import copy
 
 import Util
 from Moves import Moves
+from Cycle import Cycle
+
 
 class Markets:
     SMax = None
@@ -61,18 +63,24 @@ class Markets:
     def cost(markets):
         cost = 0    
         excessloadcamion=0
+        cycles_dictionary=Cycle.CreateCycles()
+        index="z" #indice del dizionario dei cicli fatto dai nodi presenti nel ciclio in ordine alfabetico
         
         for t in range(Util.T):
             value = 0 #variabile che tiene conto del carico sul camion nel singolo periodo t
+            index="z"
             for h in range(Util.K):
                 if(markets[h].x[t] > 0): #se porto materiale al market allora incremento il costo perchè faccio un giro
-                    cost = cost + 1
-                    value = value + markets[h].x[t]
-            #if(value > Util.Q): #controllo se supero la capacità del camion, se si aumento il costo
-             #   cost = cost + 2
+                    value = value + markets[h].x[t]#carico del camion
+                    index=index+chr(h+97)#creo l'indice
+            
+            index=''.join(sorted(index))
+            #print index 
+            if(index!="z"):
+                cost=cost+cycles_dictionary[index][0] #calcolo del costo complessivo prelevando dall'item del dizionario il costo del ciclo
                 
             if(value>Util.Q):
-                excessloadcamion=excessloadcamion+1
+                excessloadcamion=excessloadcamion+1 #conto quante volte sforo la capacita del camion
                 
                 #calcolo del costo: variabile furgone incrementata di 1 ogni volta che si sfora la capacità
                 #poi costo = costo*(1+furgone/2T)
