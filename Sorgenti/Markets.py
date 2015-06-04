@@ -90,3 +90,20 @@ class Markets:
         c=float(excessloadcamion)/float(Util.T)
         #print c        
         return cost*(1+c)
+    
+    @staticmethod
+    def updateWeights(markets):
+        for h in range(Util.K):
+            for t in range(Util.T):
+                if(markets[h].x[t] > 0):
+                    markets[h].w[t] = markets[h].w[t] + 1
+        return markets
+    
+    @staticmethod
+    def getWeights(markets):
+        weights = []
+        for h in range(Util.K):
+            for t in range(Util.T):
+                weights.append((markets[h].w[t], h, t))
+        return weights
+        

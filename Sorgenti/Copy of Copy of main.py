@@ -25,12 +25,14 @@ markets = File.readFile()
 bestsolution = copy.deepcopy(markets)
 bestsolutioncost = Markets.cost(bestsolution)
 sk = copy.deepcopy(markets)
-
+sk = Markets.updateWeights(sk)
 #ciclo contenente l'algoritmo
 tabulist = []
 newneighborhood = True
 k = 0
 stallcounter = 0
+intensification = 0
+diversification = 0
 #print "\nExecution:  " + "\t",
 tmp = -1
 while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
@@ -58,19 +60,58 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     firstimprovement = False
     skcost = Markets.cost(sk)
     #bestsolutioncost = Markets.cost(bestsolution)
-    h = 0
-    for h in range(0, Util.K):
+    print "i & d ", intensification, diversification
+    weights = Markets.getWeights(sk)
+    if(intensification >= Util.INTENSIFICATION):
+        # Per l'intensificazione si cerca di rifornire quelli che si riforniscono più spesso
+        # Si selezionano quindi quelli riforniti di meno
+        weights = sorted(weights, key = itemgetter(2), reverse=True)
+        weights = sorted(weights, key = itemgetter(0))
+        print "intensification:", weights
         
-        t0 = 0
+        i = 0
+        w, h, t0 = weights[i]
+        while(len(neighborhood) == 0):
+            
+            if(sk[h].x[t0] > 0):
+                print h, t0
+                returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+            
+            i = i + 1
+            w, h, t0 = weights[i]
         
-        for t0 in range(0, Util.T):
+        #intensification = 0
+    else:
+        if(diversification >= Util.DIVERSIFICATION):
+            weights = sorted(weights, key = itemgetter(2), reverse=True)
+            weights = sorted(weights, key = itemgetter(0), reverse=True)
+            print "diversifcation: ", weights
             
-            returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+            i = 0
+            w, h, t0 = weights[i]
+            while(len(neighborhood) == 0):
             
-            if(returned != "allneighbors"):
-                break
-        if(returned != "allneighbors"):
-            break
+                if(sk[h].x[t0] > 0):
+                    returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+                
+                i = i + 1
+                w, h, t0 = weights[i]
+            
+            #diversification = 0
+        else:
+            for h in range(0, Util.K):
+                
+                for t0 in range(0, Util.T):
+                    print sk[h].x[t0]
+                    
+                    returned = "allneighbors"
+                    if(sk[h].x[t0] > 0):
+                        returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+                    
+                    if(returned != "allneighbors"):
+                        break
+                if(returned != "allneighbors"):
+                    break
     
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
     neighborhood = sorted(neighborhood, key = itemgetter(0))
@@ -84,14 +125,26 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     #        newneighborhood = False
     #        neighborhood.pop(0)
     #        continue
-    
-    #newneighborhood = True       
+    #newneighborhood = True
+          
     sk = copy.deepcopy(bestneighbor)
-    
+    sk = Markets.updateWeights(sk)
+    print bestsolutioncost, bestneighborcost
     if(returned == "bestsolution"):
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
+        
+        intensification = intensification + 1
+        diversification = 0
+    else:
+        diversification = diversification + 1
+        intensification = 0
     
+    if(intensification >= 2*Util.INTENSIFICATION):
+        intensification = 0
+    if(diversification >= 2*Util.DIVERSIFICATION):
+        diversification = 0
+        
     tabulist.append(bestneighbormove)
     while(len(tabulist) > Util.TABULISTDIM):
         tabulist.pop(0)
