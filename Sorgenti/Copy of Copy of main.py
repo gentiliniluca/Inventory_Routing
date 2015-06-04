@@ -57,7 +57,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     neighborhood = []
     firstimprovement = False
     skcost = Markets.cost(sk)
-    bestsolutioncost = Markets.cost(bestsolution)
+    #bestsolutioncost = Markets.cost(bestsolution)
     h = 0
     for h in range(0, Util.K):
         
@@ -65,7 +65,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
         
         for t0 in range(0, Util.T):
             
-            returned, bestsolution = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+            returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
             
             if(returned != "allneighbors"):
                 break
@@ -87,6 +87,11 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     
     #newneighborhood = True       
     sk = copy.deepcopy(bestneighbor)
+    
+    if(returned == "bestsolution"):
+        bestsolution = copy.deepcopy(bestneighbor)
+        bestsolutioncost = copy.deepcopy(bestneighborcost)
+    
     tabulist.append(bestneighbormove)
     while(len(tabulist) > Util.TABULISTDIM):
         tabulist.pop(0)

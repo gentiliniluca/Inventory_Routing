@@ -50,13 +50,13 @@ def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulis
                         print marketscost, skcost, bestsolutioncost
                         if(marketscost < bestsolutioncost):
                             bestsolution = copy.deepcopy(markets)
-                            neighborhood.append((bestsolutioncost, bestsolution, (h, t0)))
-                            return "bestsolution", bestsolution
+                            neighborhood.append((marketscost, markets, (h, t0)))
+                            return "bestsolution"
                         else:
                             if(not tabumove):
                                 neighborhood.append((copy.deepcopy(marketscost), copy.deepcopy(markets), (h, t0)))
                                 if(marketscost < skcost):
-                                    return "betterneighbor", bestsolution
+                                    return "betterneighbor"
                                 
                     domove = True
                     tabumove = False
@@ -64,5 +64,5 @@ def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulis
                     t3 = t3 - 1
                 t2 = t2 - 1
             t1 = t1 - 1
-    return "allneighbors", bestsolution
+    return "allneighbors"
     
