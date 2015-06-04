@@ -18,7 +18,7 @@ start = time.time()
 #reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
 markets = []
 markets = File.readFile()
-cycles_dictionary=Cycle.Cycle.CreateCycles()
+cycles_dictionary=Cycle.CreateCycles()
 #for h in range(Util.K):
 #    markets.append(Markets(S[h], S1[h], q[h]))
 #    
@@ -78,7 +78,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
             
             if(sk[h].x[t0] > 0):
                 print h, t0
-                returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+                returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary)
             
             i = i + 1
             w, h, t0 = weights[i]
@@ -95,7 +95,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
             while(len(neighborhood) == 0):
             
                 if(sk[h].x[t0] > 0):
-                    returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+                    returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary)
                 
                 i = i + 1
                 w, h, t0 = weights[i]
@@ -109,7 +109,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
                     
                     returned = "allneighbors"
                     if(sk[h].x[t0] > 0):
-                        returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist)
+                        returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary)
                     
                     if(returned != "allneighbors"):
                         break
