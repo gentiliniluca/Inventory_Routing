@@ -8,14 +8,17 @@ import time
 
 import Util
 import File
+import Cycle
 from Markets import Markets
 from Moves import Moves
 import Neighborhood
+
 
 start = time.time()
 #reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
 markets = []
 markets = File.readFile()
+cycles_dictionary=Cycle.Cycle.CreateCycles()
 #for h in range(Util.K):
 #    markets.append(Markets(S[h], S1[h], q[h]))
 #    
@@ -23,7 +26,7 @@ markets = File.readFile()
 
 #come soluzione si intende la situazione dei supermercati
 bestsolution = copy.deepcopy(markets)
-bestsolutioncost = Markets.cost(bestsolution)
+bestsolutioncost = Markets.cost(bestsolution,cycles_dictionary)
 sk = copy.deepcopy(markets)
 sk = Markets.updateWeights(sk)
 #ciclo contenente l'algoritmo
@@ -58,7 +61,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
     neighborhood = []
     firstimprovement = False
-    skcost = Markets.cost(sk)
+    skcost = Markets.cost(sk,cycles_dictionary)
     #bestsolutioncost = Markets.cost(bestsolution)
     print "i & d ", intensification, diversification
     weights = Markets.getWeights(sk)

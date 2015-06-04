@@ -4,7 +4,7 @@ import copy
 
 import Util
 from Moves import Moves
-from Cycle import Cycle
+
 
 
 class Markets:
@@ -60,10 +60,10 @@ class Markets:
  
  
     @staticmethod
-    def cost(markets):
+    def cost(markets,cycles_dictionary):
         cost = 0    
         excessloadcamion=0
-        cycles_dictionary=Cycle.CreateCycles()
+        
         index="z" #indice del dizionario dei cicli fatto dai nodi presenti nel ciclio in ordine alfabetico
         
         for t in range(Util.T):
