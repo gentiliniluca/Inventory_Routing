@@ -169,7 +169,20 @@ print "Elapsed time:", int(time.time()-start), "seconds\n\nThe best solution is:
 
 for h in bestsolution:
     print h.toString()
-    
+print "\n"
+index="z"  
+for i in range(Util.T):
+    for j in range (Util.K):
+        if(bestsolution[j].x[i]>0):
+            for counter in range (0,len(index)):
+                if(index[counter]>chr(j+97)):
+                    app_index=index[0:counter]
+                    app_index=app_index+chr(j+97)
+                    app_index=app_index+index[counter::]
+                    index=app_index
+                    break
+    print "Periodo T =",i+1,"\tOrdine di visita dei nodi: ",cycles_dictionary[index][1],"\tCosto: ", cycles_dictionary[index][0]," km"
+    index="z"            
 print "\nCost: " + str(bestsolutioncost)
 #f.write("Cost:" + str(bestsolutioncost))
 
