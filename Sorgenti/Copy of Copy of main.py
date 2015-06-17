@@ -27,6 +27,8 @@ cycles_dictionary=Cycle.CreateCycles()
 #come soluzione si intende la situazione dei supermercati
 bestsolution = copy.deepcopy(markets)
 bestsolutioncost = Markets.cost(bestsolution,cycles_dictionary)
+print "\t\t\t\tBest solution cost: ", bestsolutioncost
+
 sk = copy.deepcopy(markets)
 sk = Markets.updateWeights(sk)
 #ciclo contenente l'algoritmo
@@ -63,21 +65,22 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     firstimprovement = False
     skcost = Markets.cost(sk,cycles_dictionary)
     #bestsolutioncost = Markets.cost(bestsolution)
-    print "i & d ", intensification, diversification
+    #print "i & d ", intensification, diversification
     weights = Markets.getWeights(sk)
     if(intensification >= Util.INTENSIFICATION):
         # Per l'intensificazione si cerca di rifornire quelli che si riforniscono più spesso
         # Si selezionano quindi quelli riforniti di meno
         weights = sorted(weights, key = itemgetter(2), reverse=True)
         weights = sorted(weights, key = itemgetter(0))
-        print "intensification:", weights
+        #print "intensification: ", weights
+        print "Intensification!"
         
         i = 0
         w, h, t0 = weights[i]
         while(len(neighborhood) == 0):
             
             if(sk[h].x[t0] > 0):
-                print h, t0
+                #print h, t0
                 returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary)
             
             i = i + 1
@@ -88,7 +91,8 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
         if(diversification >= Util.DIVERSIFICATION):
             weights = sorted(weights, key = itemgetter(2), reverse=True)
             weights = sorted(weights, key = itemgetter(0), reverse=True)
-            print "diversifcation: ", weights
+            #print "diversifcation: ", weights
+            print "Diversifcation!"            
             
             i = 0
             w, h, t0 = weights[i]
@@ -105,7 +109,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
             for h in range(0, Util.K):
                 
                 for t0 in range(0, Util.T):
-                    print sk[h].x[t0]
+                    #print sk[h].x[t0]
                     
                     returned = "allneighbors"
                     if(sk[h].x[t0] > 0):
@@ -132,7 +136,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
           
     sk = copy.deepcopy(bestneighbor)
     sk = Markets.updateWeights(sk)
-    print bestsolutioncost, bestneighborcost
+    #print bestsolutioncost, bestneighborcost
     if(returned == "bestsolution"):
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
@@ -156,6 +160,8 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
         stallcounter = 0
     else:
         stallcounter = stallcounter + 1
+    
+    print "Best neighbor cost: ", bestneighborcost, "\tBest solution cost: ", bestsolutioncost 
       
     k = k + 1
 #print " - 100%\n"

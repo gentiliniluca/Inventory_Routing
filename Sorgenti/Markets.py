@@ -89,7 +89,7 @@ class Markets:
         
         c=float(excessloadcamion)/float(Util.T)
         #print c        
-        return cost*(1+c)
+        return cost*(1+10*c)
     
     @staticmethod
     def updateWeights(markets):
