@@ -165,11 +165,11 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
       
     k = k + 1
 #print " - 100%\n"
-print "Elapsed time:", int(time.time()-start), "seconds\n\nThe best solution is:"
+print "\nTempo di esecuzione:", int(time.time()-start), "seconds\n\nLa soluzione migliore e':\n"
 
 for h in bestsolution:
     print h.toString()
-print "\n"
+print ""
 index="z"  
 for i in range(Util.T):
     for j in range (Util.K):
@@ -183,7 +183,7 @@ for i in range(Util.T):
                     break
     print "Periodo T =",i+1,"\tOrdine di visita dei nodi: ",cycles_dictionary[index][1],"\tCosto: ", cycles_dictionary[index][0]," km"
     index="z"            
-print "\nCost: " + str(bestsolutioncost)
+print "\nCosto: " + str(bestsolutioncost)+" km"
 #f.write("Cost:" + str(bestsolutioncost))
 
 #f.close()
