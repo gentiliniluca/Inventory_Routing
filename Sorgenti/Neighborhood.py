@@ -38,13 +38,11 @@ def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulis
                                     tabumove = True 
                             else:
                                 domove = False
-                            #print "move", h, t0, t, x[i], domove, tabumove
                         i = i + 1
                 
                 
                 if(domove):
                     marketscost, exceeded = Markets.cost(markets, cycles_dictionary, penality)
-                    #print marketscost, skcost, bestsolutioncost
                     if(marketscost < bestsolutioncost):
                         bestsolution = copy.deepcopy(markets)
                         neighborhood.append((marketscost, markets, (h, t0)))

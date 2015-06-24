@@ -13,16 +13,12 @@ from Markets import Markets
 from Moves import Moves
 import Neighborhood
 
-
 start = time.time()
+
 #reperimento dei dati iniziali dal file di input e inizializzazione del problema con una soluzione banale
 markets = []
 markets = File.readFile()
 cycles_dictionary=Cycle.CreateCycles()
-#for h in range(Util.K):
-#    markets.append(Markets(S[h], S1[h], q[h]))
-#    
-#load = Loads(markets)
 
 #come soluzione si intende la situazione dei supermercati
 penality = 0
@@ -39,27 +35,10 @@ k = 0
 stallcounter = 0
 intensification = 0
 diversification = 0
-#print "\nExecution:  " + "\t",
+
 tmp = -1
 while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
-    #f = open("output.txt", "a")
-    #f.write("K =" + str(k))
-    #f.close()
-    #print k
-    
-    
-    
-    #Un po' di piacere per gli occhi...
-    #perCent = k*100//Util.ITERATIONS
-    #if(perCent % 10 == 0 and tmp != perCent):
-    #    if(tmp != -1):
-    #        print " - ",
-    #    print str(perCent) + "%",
-    #    tmp = perCent
-    
-    
     # selezionare la miglior soluzione dell'intorno, anche peggiore
-    # per il momento selezione casuale
     
     #verificare se è necessario lavorare in un nuovo vicinato (lettura del parametro impostato sotto) e che il vicinato attuale contenga almeno un elemento 
     neighborhood = []
@@ -69,15 +48,13 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
         penality = penality + 1 #se si continua a lavorare nell'intorno di una soluzione che sfora la capacità del camion, si aumenta ulteriormente il parametro di penalità
     else:
         penality = 0
-    #bestsolutioncost = Markets.cost(bestsolution)
-    #print "i & d ", intensification, diversification
+        
     weights = Markets.getWeights(sk)
     if(intensification >= Util.INTENSIFICATION):
         # Per l'intensificazione si cerca di rifornire quelli che si riforniscono più spesso
         # Si selezionano quindi quelli riforniti di meno
         weights = sorted(weights, key = itemgetter(2), reverse=True)
         weights = sorted(weights, key = itemgetter(0))
-        #print "intensification: ", weights
         print "Intensification!"
         
         i = 0
@@ -85,18 +62,15 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
         while(len(neighborhood) == 0):
             
             if(sk[h].x[t0] > 0):
-                #print h, t0
                 returned = Neighborhood.new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary, penality)
             
             i = i + 1
             w, h, t0 = weights[i]
-        
-        #intensification = 0
+            
     else:
         if(diversification >= Util.DIVERSIFICATION):
             weights = sorted(weights, key = itemgetter(2), reverse=True)
             weights = sorted(weights, key = itemgetter(0), reverse=True)
-            #print "diversifcation: ", weights
             print "Diversifcation!"            
             
             i = 0
@@ -109,12 +83,10 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
                 i = i + 1
                 w, h, t0 = weights[i]
             
-            #diversification = 0
         else:
             for h in range(0, Util.K):
                 
                 for t0 in range(0, Util.T):
-                    #print sk[h].x[t0]
                     
                     returned = "allneighbors"
                     if(sk[h].x[t0] > 0):
@@ -128,20 +100,10 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     #ordinare per costo crescente la lista e prendere il primo elemento (migliore)
     neighborhood = sorted(neighborhood, key = itemgetter(0))
     bestneighborcost, bestneighbor, bestneighbormove = neighborhood[0]
-    
-    #if(bestneighborcost < bestsolutioncost):
-    #    bestsolution = copy.deepcopy(bestneighbor)
-    #    bestsolutioncost = copy.deepcopy(bestneighborcost)
-    #else:
-    #    if(Util.subfinder(bestneighbormoveslist, tabulist)):
-    #        newneighborhood = False
-    #        neighborhood.pop(0)
-    #        continue
-    #newneighborhood = True
           
     sk = copy.deepcopy(bestneighbor)
     sk = Markets.updateWeights(sk)
-    #print bestsolutioncost, bestneighborcost
+
     if(returned == "bestsolution"):
         bestsolution = copy.deepcopy(bestneighbor)
         bestsolutioncost = copy.deepcopy(bestneighborcost)
@@ -169,7 +131,7 @@ while ((k < Util.ITERATIONS) and (stallcounter < Util.MAXSTALLCOUNTER)):
     print "Best neighbor cost: ", bestneighborcost, "\tBest solution cost: ", bestsolutioncost 
       
     k = k + 1
-#print " - 100%\n"
+    
 print "\nTempo di esecuzione:", int(time.time()-start), "seconds\n\nLa soluzione migliore e':\n"
 
 for h in bestsolution:
@@ -189,6 +151,3 @@ for i in range(Util.T):
     print "Periodo T =",i+1,"\tOrdine di visita dei nodi: ",cycles_dictionary[index][1],"\tCosto: ", cycles_dictionary[index][0]," km"
     index="z"            
 print "\nCosto: " + str(bestsolutioncost)+" km"
-#f.write("Cost:" + str(bestsolutioncost))
-
-#f.close()
