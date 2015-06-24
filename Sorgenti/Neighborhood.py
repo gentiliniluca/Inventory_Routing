@@ -4,7 +4,7 @@ from Markets import Markets
 from Moves import Moves
 import Util
 
-def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary):
+def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulist, cycles_dictionary, penality):
         
     t1 = sk[h].x[t0]
     
@@ -43,7 +43,7 @@ def new(neighborhood, bestsolution, bestsolutioncost, sk, skcost, h, t0, tabulis
                 
                 
                 if(domove):
-                    marketscost = Markets.cost(markets, cycles_dictionary)
+                    marketscost, exceeded = Markets.cost(markets, cycles_dictionary, penality)
                     #print marketscost, skcost, bestsolutioncost
                     if(marketscost < bestsolutioncost):
                         bestsolution = copy.deepcopy(markets)

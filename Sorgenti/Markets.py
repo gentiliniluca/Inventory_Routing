@@ -60,9 +60,10 @@ class Markets:
  
  
     @staticmethod
-    def cost(markets,cycles_dictionary):
+    def cost(markets,cycles_dictionary,penality):
         cost = 0    
-        excessloadcamion=0
+        excessloadcamion = 0
+        c = 0
         
         index="z" #indice del dizionario dei cicli fatto dai nodi presenti nel ciclio in ordine alfabetico
         
@@ -80,16 +81,16 @@ class Markets:
                 cost=cost+cycles_dictionary[index][0] #calcolo del costo complessivo prelevando dall'item del dizionario il costo del ciclo
                 
             if(value>Util.Q):
-                excessloadcamion=excessloadcamion+1 #conto quante volte sforo la capacita del camion
-                
+                #excessloadcamion=excessloadcamion+1 #conto quante volte sforo la capacita del camion
+                excessloadcamion = excessloadcamion + value - Util.Q
                 #calcolo del costo: variabile furgone incrementata di 1 ogni volta che si sfora la capacità
                 #poi costo = costo*(1+furgone/2T)
          
         #return cost
         
-        c=float(excessloadcamion)/float(Util.T)
+        c=float(excessloadcamion)*(pow(2,penality))
         #print c        
-        return cost*(1+10*c)
+        return ((cost*(1 + c)), c)
     
     @staticmethod
     def updateWeights(markets):
